@@ -1,6 +1,6 @@
 plugins {
-    id("com.android.library") version "4.2.2"
-    id("kotlin-android") version "1.5.31"
+    id("com.android.library") version "7.4.0"
+    id("kotlin-android") version "1.8.10"
     `maven-publish`
 }
 
@@ -70,7 +70,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.aiiisana"
                 artifactId = "chatlibrary"
-                version = "1.1.7"
+                version = "1.1.8"
             }
         }
 
