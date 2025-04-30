@@ -8,9 +8,9 @@ val githubProperties = Properties().apply {
 }
 
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.jetbrains.kotlin.android)
-    `maven-publish`
+    id("com.android.library") version "8.5.1"
+    id("org.jetbrains.kotlin.android") version "1.9.0"
+    id("maven-publish")
 }
 
 android {
@@ -48,44 +48,39 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
-    implementation(libs.material)
+    implementation("androidx.core:core-ktx:1.15.0")
+    implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("com.google.android.material:material:1.12.0")
 
     // WebSocket
-    implementation(libs.okhttp)
+    implementation("com.squareup.okhttp3:okhttp:4.12.0")
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
     // RecyclerView
-    implementation(libs.recyclerview)
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
 
+    // Kotlin Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+
+    // Koin
     implementation("io.insert-koin:koin-android:3.4.0")
 
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    // Testing
+    testImplementation("junit:junit:4.13.2")
+    androidTestImplementation("androidx.test.ext:junit:1.2.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
 }
 
 afterEvaluate {
     publishing {
         publications {
             create<MavenPublication>("release") {
-                from(components["release"])
-
                 groupId = "com.github.aiiisana"
-                artifactId = "chatlibrary"
+                artifactId = "chat-library"
                 version = "1.1.1"
-            }
-        }
 
-        repositories {
-            maven {
-                name = "GitHubPackages"
-                url = uri("https://maven.pkg.github.com/aiiisana/chat-library")
-                credentials {
-                    username = githubProperties["gpr.usr"] as String? ?: System.getenv("GPR_USER")
-                    password = githubProperties["gpr.key"] as String? ?: System.getenv("GPR_API_KEY")
+                afterEvaluate {
+                    from(components["release"])
                 }
             }
         }
