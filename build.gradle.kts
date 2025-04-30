@@ -61,7 +61,7 @@ afterEvaluate {
                 from(components["release"])
                 groupId = "com.github.aiiisana"
                 artifactId = "chat-library"
-                version = "1.1.5"
+                version = "1.1.1"
             }
         }
     }
