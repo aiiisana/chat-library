@@ -48,7 +48,7 @@ publishing {
                 from(components["release"])
                 groupId = "com.github.aiiisana"
                 artifactId = "chat-library"
-                version = "1.1.3"
+                version = "1.1.4"
             }
         }
     }
