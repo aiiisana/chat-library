@@ -1,17 +1,18 @@
+// ChatActivity.kt
 package advanced.lab.chatlibrary
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import advanced.lab.chatlibrary.databinding.ActivityChatBinding
-import okhttp3.*
-import okio.ByteString
-import java.util.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class ChatActivity : AppCompatActivity() {
     private lateinit var binding: ActivityChatBinding
     private lateinit var adapter: MessageAdapter
-    private var webSocket: WebSocket? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,33 +23,34 @@ class ChatActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
 
+        // Добавим приветственное сообщение от поддержки
+        adapter.addMessage(Message(
+            "Hello! Thank you for contacting support. How can I help you today?",
+            false
+        ))
+
         binding.sendButton.setOnClickListener {
             val msg = binding.messageEditText.text.toString()
             if (msg.isNotEmpty()) {
                 adapter.addMessage(Message(msg, true))
-                webSocket?.send(msg)
+                sendMessageToBackend(msg)
                 binding.messageEditText.text.clear()
             }
         }
-
-        val client = OkHttpClient()
-        val request = Request.Builder().url("wss://echo.websocket.org").build()
-        webSocket = client.newWebSocket(request, object : WebSocketListener() {
-            override fun onMessage(webSocket: WebSocket, text: String) {
-                runOnUiThread {
-                    val displayText = if (text == "203 = 0xcb") "⚠️ Special Message" else text
-                    adapter.addMessage(Message(displayText, false))
-                }
-            }
-
-            override fun onMessage(webSocket: WebSocket, bytes: ByteString) {
-                onMessage(webSocket, bytes.utf8())
-            }
-        })
     }
 
-    override fun onDestroy() {
-        super.onDestroy()
-        webSocket?.close(1000, null)
+    private fun sendMessageToBackend(message: String) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val response = ChatBackend.sendMessage(message)
+                withContext(Dispatchers.Main) {
+                    adapter.addMessage(Message(response, false))
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    adapter.addMessage(Message("Error: ${e.message}", false))
+                }
+            }
+        }
     }
 }

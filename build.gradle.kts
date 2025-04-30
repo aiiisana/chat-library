@@ -54,9 +54,13 @@ dependencies {
 
     // WebSocket
     implementation(libs.okhttp)
+    implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
 
     // RecyclerView
     implementation(libs.recyclerview)
+
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
+    implementation("io.insert-koin:koin-android:3.4.0")
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
@@ -71,7 +75,7 @@ afterEvaluate {
 
                 groupId = "com.github.aiiisana"
                 artifactId = "chatlibrary"
-                version = "1.0.0"
+                version = "1.1.1"
             }
         }
 

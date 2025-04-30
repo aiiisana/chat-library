@@ -30,6 +30,7 @@ class MessageAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         else if (holder is ReceivedViewHolder) holder.bind(msg)
     }
 
+    
     fun addMessage(message: Message) {
         messages.add(message)
         notifyItemInserted(messages.size - 1)

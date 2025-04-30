@@ -4,30 +4,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="12dp">
+    android:background="#08090C"
+    android:padding="8dp">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="8dp" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="#1E1F23"
+        android:elevation="4dp"
+        android:padding="8dp">
 
         <EditText
             android:id="@+id/messageEditText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:hint="Type a message" />
+            android:hint="Type a message"
+            android:textColor="#FFFFFF"
+            android:textColorHint="#666666"
+            android:background="@null" />
 
         <Button
             android:id="@+id/sendButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Send" />
+            android:text="Send"
+            android:backgroundTint="#FF9D2A"
+            android:textColor="#08090C"
+            android:textAllCaps="false"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp" />
     </LinearLayout>
 </LinearLayout>

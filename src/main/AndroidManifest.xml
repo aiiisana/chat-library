@@ -4,7 +4,7 @@
         <activity
             android:name=".ChatActivity"
             android:exported="true"
-            android:theme="@style/Theme.AppCompat.Light.DarkActionBar" />
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
 </manifest>
