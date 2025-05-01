@@ -1,7 +1,16 @@
+import java.util.Properties
+
+val githubProperties = Properties().apply {
+    val githubPropertiesFile = rootProject.file("github.properties")
+    if (githubPropertiesFile.exists()) {
+        load(githubPropertiesFile.inputStream())
+    }
+}
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.jetbrains.kotlin.android)
-    id("maven-publish")
+    `maven-publish`
 }
 
 android {
@@ -42,9 +51,14 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
+
+    // WebSocket
     implementation(libs.okhttp)
     implementation("com.squareup.okhttp3:logging-interceptor:4.12.0")
+
+    // RecyclerView
     implementation(libs.recyclerview)
+
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
     implementation("io.insert-koin:koin-android:3.4.0")
 
@@ -53,15 +67,26 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 }
 
-// JitPack-friendly publishing
 afterEvaluate {
     publishing {
         publications {
             create<MavenPublication>("release") {
                 from(components["release"])
+
                 groupId = "com.github.aiiisana"
-                artifactId = "chat-library"
+                artifactId = "chatlibrary"
                 version = "1.2.0"
+            }
+        }
+
+        repositories {
+            maven {
+                name = "GitHubPackages"
+                url = uri("https://maven.pkg.github.com/aiiisana/chat-library")
+                credentials {
+                    username = githubProperties["gpr.usr"] as String? ?: System.getenv("GPR_USER")
+                    password = githubProperties["gpr.key"] as String? ?: System.getenv("GPR_API_KEY")
+                }
             }
         }
     }
