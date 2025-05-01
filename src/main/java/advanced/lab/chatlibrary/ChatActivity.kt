@@ -1,4 +1,3 @@
-// ChatActivity.kt
 package advanced.lab.chatlibrary
 
 import android.os.Bundle
@@ -23,7 +22,6 @@ class ChatActivity : AppCompatActivity() {
         binding.recyclerView.layoutManager = LinearLayoutManager(this)
         binding.recyclerView.adapter = adapter
 
-        // Добавим приветственное сообщение от поддержки
         adapter.addMessage(Message(
             "Hello! Thank you for contacting support. How can I help you today?",
             false

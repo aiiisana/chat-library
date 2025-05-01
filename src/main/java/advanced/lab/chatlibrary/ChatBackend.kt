@@ -1,10 +1,10 @@
-// ChatBackend.kt
 package advanced.lab.chatlibrary
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
+import org.koin.core.context.GlobalContext
 import org.koin.core.context.startKoin
 import org.koin.dsl.module
 import java.util.concurrent.TimeUnit
@@ -13,7 +13,6 @@ object ChatBackend : KoinComponent {
     private val chatService: ChatService by inject()
 
     init {
-        // Инициализация Koin должна происходить один раз при первом обращении
         startKoinIfNeeded()
     }
 
@@ -22,15 +21,13 @@ object ChatBackend : KoinComponent {
     }
 
     private fun startKoinIfNeeded() {
-        try {
+        if (GlobalContext.getOrNull() == null) {
             startKoin {
                 modules(module {
                     single { provideOkHttpClient() }
                     single { provideChatService(get()) }
                 })
             }
-        } catch (e: IllegalStateException) {
-            // Koin уже инициализирован, игнорируем ошибку
         }
     }
 
